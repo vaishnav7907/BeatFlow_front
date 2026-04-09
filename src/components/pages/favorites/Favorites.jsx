@@ -38,7 +38,7 @@ const Favorites = () => {
               <img
                 src="https://images.unsplash.com/photo-1507838153414-b4b713384a76"
                 alt=""
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover hover:scale-105 transition duration-300"
               />
             </div>
 
@@ -62,9 +62,9 @@ const Favorites = () => {
               <p className="text-3xl text-white">4</p>
             </div>
 
-            <div className="bg-gray-900 rounded-xl p-6  grow">
-              <h3 className="text-gray-400 text-sm mb-2">Top Genre</h3>
-              <p className="text-3xl text-white">Electronic</p>
+            <div className="bg-gray-900 rounded-xl text-lg flex justify-center items-center grow">
+              <h3 className="text-gray-400   text-center italic"><span className="text-black text-2xl">“</span> Where words <span className="text-red-700 text-2xl">f</span>ail, music speaks <span className="text-black text-2xl">”</span></h3>
+              
             </div>
 
             <div className="bg-gray-900 rounded-xl p-6  grow">

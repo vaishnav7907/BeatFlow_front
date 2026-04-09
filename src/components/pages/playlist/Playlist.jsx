@@ -72,21 +72,8 @@ const Playlist = () => {
     }
   };
 
-  const updatePlaylist = async () => {
-    try {
-      const updateplaylisapi = await axios.patch(
-        `http://localhost:5999/authentication/updtplaylist/${id}`,
-      );
-
-      setcreateplalist(updateplaylisapi.data);
-    } catch (error) {
-      console.log("updateplaylist error anu monne", error);
-    }
-  };
-
   return (
     <div>
-      
       <div className="flex justify-between">
         <div>
           <h1 className="text-4xl text-white mb-2">Your Playlists</h1>
@@ -104,7 +91,6 @@ const Playlist = () => {
         </button>
       </div>
 
-      
       <div className="flex pt-10 gap-4 flex-wrap">
         {createplaylist.map((item) => (
           <div
@@ -124,7 +110,6 @@ const Playlist = () => {
                 </p>
               </div>
 
-              
               <div className="relative">
                 <BsThreeDotsVertical
                   className="text-gray-300 cursor-pointer"
@@ -140,7 +125,9 @@ const Playlist = () => {
                       className="w-full text-left px-3 py-2 text-sm hover:bg-gray-400 rounded-t-xl"
                       onClick={(e) => {
                         e.stopPropagation();
-                        navigation("/playlistname");
+                        navigation("/playlistname", {
+                          state: { playlistId: item._id },
+                        });
                       }}
                     >
                       Rename
@@ -149,7 +136,8 @@ const Playlist = () => {
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
-                        deleteplaylistfn(item._id);
+                        (deleteplaylistfn(item._id),
+                          { state: { playlistId: item._id } });
                       }}
                       className="w-full text-left px-3 py-2 text-sm text-red-500 hover:bg-red-300 rounded-b-xl"
                     >
@@ -160,15 +148,12 @@ const Playlist = () => {
               </div>
             </div>
 
-         
             <div className="flex justify-end mt-6">
               <div
                 className="opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition duration-300"
                 onClick={(e) => {
                   e.stopPropagation();
-                  navigation("/urplaylist", {
-                    state: { playlistId: item._id },
-                  });
+                  navigation("/urplaylist");
                 }}
               >
                 <div className="bg-white text-black p-2 rounded-full hover:scale-110 transition">
