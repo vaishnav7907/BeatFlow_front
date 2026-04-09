@@ -1,22 +1,40 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import MainDashboard from "../dashboard/MainDashboard";
+import WelcomeInterface from "./WelcomeInterface";
+import axios, { Axios } from "axios";
+import { useNavigate } from "react-router-dom";
+import "../authentication/Signup.css";
 
 const Signup = ({ tosignup }) => {
-  const [emaill, setEmaill] = useState("");
+  // const navigate=useNavigate()
+  const [Email, setEmail] = useState("");
 
-  const [passwordd, setPasswordd] = useState("");
+  const [Password, setPassword] = useState("");
 
   const onchangeemail = (e) => {
-    setEmaill(e.target.value);
+    setEmail(e.target.value);
   };
 
   const onchangepassword = (e) => {
-    setPasswordd(e.target.value);
+    setPassword(e.target.value);
   };
 
-  const submitt = (prev) => {
+  const submitt = async (prev) => {
     prev.preventDefault();
-    console.log(emaill, passwordd);
+    console.log(Email, Password);
     tosignup();
+
+    try {
+      const response = await axios.post(
+        "http://localhost:5999/authentication/signup",
+        { Email, Password },
+      );
+      console.log(response);
+    } catch (error) {
+      console.log("this:", error);
+    }
+
+    // navigate("/signup")
   };
 
   return (
@@ -34,7 +52,7 @@ const Signup = ({ tosignup }) => {
               type="email"
               className="w-70  h-7  bg-white/2  border-white/0  rounded-[.5em] p-3 text-[#E9854F] placeholder-gray-500 "
               placeholder="email . . ."
-              value={emaill}
+              value={Email}
               onChange={onchangeemail}
             />
 
@@ -45,7 +63,7 @@ const Signup = ({ tosignup }) => {
               type="password"
               className="w-70  h-7  bg-white/2  border-white/0  rounded-[.5em] p-3 text-[#E9854F] placeholder-gray-500"
               placeholder="password . . ."
-              value={passwordd}
+              value={Password}
               onChange={onchangepassword}
             />
           </div>

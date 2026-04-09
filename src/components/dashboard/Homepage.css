@@ -1,0 +1,103 @@
+.slider {
+  width: 100%;
+  height: 18rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+}
+
+/* CARD */
+.card {
+  position: absolute;
+  width: 18rem;
+  height: 18rem;
+  border-radius: 1.5rem;
+  overflow: hidden;
+  transition: all 0.8s cubic-bezier(.22,.61,.36,1);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+  will-change: transform;
+}
+
+/* IMAGE */
+.card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* POSITIONS */
+.c1 {
+  left: 50%;
+  transform: translateX(-50%);
+  animation: card1 9s infinite ease-in-out;
+}
+
+.c2 {
+  left: 50%;
+  transform: translateX(calc(-50% + 28rem));
+  animation: card2 9s infinite ease-in-out;
+}
+
+.c3 {
+  left: 50%;
+  transform: translateX(calc(-50% - 28rem));
+  animation: card3 9s infinite ease-in-out;
+}
+
+/* ANIMATIONS (smoother timing) */
+
+@keyframes card1 {
+  0%, 100% {
+    transform: translateX(-50%) scale(1);
+    z-index: 3;
+    filter: none;
+  }
+  33% {
+    transform: translateX(calc(-50% - 28rem)) scale(0.8);
+    z-index: 2;
+    filter: blur(1px);
+  }
+  66% {
+    transform: translateX(calc(-50% + 28rem)) scale(0.8);
+    z-index: 1;
+    filter: blur(1px);
+  }
+}
+
+@keyframes card2 {
+  0%, 100% {
+    transform: translateX(calc(-50% + 28rem)) scale(0.8);
+    z-index: 1;
+    filter: blur(1px);
+  }
+  33% {
+    transform: translateX(-50%) scale(1);
+    z-index: 3;
+    filter: none;
+  }
+  66% {
+    transform: translateX(calc(-50% - 28rem)) scale(0.8);
+    z-index: 2;
+    filter: blur(1px);
+  }
+}
+
+@keyframes card3 {
+  0%, 100% {
+    transform: translateX(calc(-50% - 28rem)) scale(0.8);
+    z-index: 2;
+    filter: blur(1px);
+  }
+  33% {
+    transform: translateX(calc(-50% + 28rem)) scale(0.8);
+    z-index: 1;
+    filter: blur(1px);
+  }
+  66% {
+    transform: translateX(-50%) scale(1);
+    z-index: 3;
+    filter: none;
+  }
+}

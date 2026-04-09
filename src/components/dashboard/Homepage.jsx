@@ -1,140 +1,143 @@
-import React, { useState } from 'react'
-import { IoSearch } from "react-icons/io5";
-import listeningmusic from "../../assets/welcomepageimg/listeningmusic.png"
-import listeningmusic2 from "../../assets/welcomepageimg/listeningmusic2.png"
-import listeningmusic3 from "../../assets/welcomepageimg/listeningmusic33.png"
-import listeningmusic4 from "../../assets/welcomepageimg/listeningmusic44.png"
+import React, { useState, useEffect } from "react";
+import "../dashboard/Homepage.css";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { FaHeart } from "react-icons/fa";
+import { BsArrowRight } from "react-icons/bs";
+import { CgPlayListAdd } from "react-icons/cg";
 
 const Homepage = () => {
+  const navigatee = useNavigate();
 
+  const [artists, setArtists] = useState([]);
+  const [getasong, setGetasong] = useState([]);
 
-    const [space , setSpace]= useState(true)
-    return (
-        <div className=' w-full flex flex-col gap-9  h-screen ' >
-            <div className='flex flex-col gap-7'>
+  // ✅ fetch artists
+  useEffect(() => {
+    const fetchartist = async () => {
+      try {
+        const res = await axios.get(
+          "http://localhost:5999/authentication/getallartists",
+        );
+        setArtists(res.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    fetchartist();
+  }, []);
 
+  // ✅ fetch songs
+  useEffect(() => {
+    const fetchasong = async () => {
+      try {
+        const res = await axios.get(
+          "http://localhost:5999/authentication/getallsongs",
+        );
+        setGetasong(res.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    fetchasong();
+  }, []);
 
+  return (
+    <div className="w-full flex flex-col gap-9 min-h-screen">
+      {/* HEADER */}
+      <div>
+        <h1 className="text-5xl text-white mb-4">Good Afternoon</h1>
+        <p className="text-gray-500 text-xl">Explore thousands of tracks</p>
+        <div className="w-full h-0.5 bg-gray-900 mt-4"></div>
+      </div>
 
-                <div>
-                    <h1 className="text-4xl text-white mb-2">
-                        Discover Music
-                    </h1>
-
-                    <p className="text-gray-400">Find your next favorite track</p>
-                </div>
-
-                {/* search bar */}
-                <div className=' flex justify-start items-center relative '>
-                    <input type="text" className=' w-full bg-gray-900  border-gray-800 rounded-xl px-12 py-4 text-white  ' placeholder="Search for songs or artists..." />
-                    <IoSearch className='text-gray-400 absolute mr-2 w-10' size={21} />
-                </div>
-
-
-                {/* categoriesname */}
-                <div className='flex gap-3'>
-
-
-                    <button className=' bg-gray-900 px-6 py-2 rounded-full'><p>All</p></button>
-                    <button className=' bg-gray-900 px-6 py-2 rounded-full'><p>Tamil</p></button>
-                    <button className=' bg-gray-900 px-6 py-2 rounded-full'><p>Malayalam</p></button>
-                    <button className=' bg-gray-900 px-6 py-2 rounded-full'> <p>Hindi</p></button>
-
-                </div>
+      {/* FEATURED */}
+      {getasong.length >= 3 && (
+        <div className="slider">
+          {getasong.slice(2, 5).map((song, index) => (
+            <div className={`card c${index + 1}`} key={song._id}>
+              <img src={`http://localhost:5999/${song.songimage}`} alt="" />
             </div>
-
-
-
-            {/* featured section */}
-
-
-
-            <div className='flex flex-col gap-5'>
-                <div>
-                    <h1 className='text-2xl text-white '>Featured</h1>
-                </div>
-
-
-                <div className='  w-full '>
-
-                    <div className='h-64 bg-white rounded-2xl bg-linear-to-r from-gray-800 via-gray-900 to-black    flex justify-between items-center px-9 '>
-                        <div className='flex flex-col gap-3'>
-                            <h1 className='text-4xl text-white'>Your Weekly Mix</h1>
-                            <p className='text-gray-400'>Personalized playlist just for you</p>
-                            <button className='py-2 w-27 bg-white text-black rounded-full hover:bg-gray-200 '>Play Now</button>
-                        </div>
-
-                        <div className='w-48 h-48 bg-linear-to-br from-gray-700 to-gray-900 rounded-xl   '>
-
-                        </div>
-
-
-                    </div>
-                </div>
-            </div>
-
-            {/* all songs */}
-
-            <div>
-                <div >
-
-                    <div className=' '><h1>Songs</h1></div>
-
-                    <div className='flex flex-wrap gap-9  justify-between'>
-                        <div className='h-64 w-58 bg-gray-800 rounded-2xl '>
-                            <div className='w-full h-47 object-cover overflow-hidden rounded-tl-2xl rounded-tr-2xl'>
-                                <img src={listeningmusic} alt=""  className='opacity-80'/>
-                            </div>
-
-                            {/* spring */}
-
-                            <div className='flex justify-center items-center pt-7'>
-                                <h1 className='text-white text-2xl truncate'>Soft rebirth </h1>
-                            </div>
-
-                        </div>
-
-
-                        <div className='h-64 w-58 bg-gray-800 rounded-2xl'>
-                            <div className='w-full h-47 object-cover overflow-hidden rounded-tl-2xl rounded-tr-2xl'>
-                                <img src={listeningmusic2} alt="" className='opacity-80'/>
-                            </div>
-
-                            {/* summmer */}
-                            <div className='flex justify-center items-center pt-7'>
-                                <h1 className='text-white text-2xl truncate'>Sun-kissed</h1>
-                            </div>
-                        </div>
-
-
-                        <div className='h-64 w-58 bg-gray-800 rounded-2xl '>
-                            <div  className='w-full h-47 object-cover overflow-hidden rounded-tl-2xl rounded-tr-2xl'>
-                                <img src={listeningmusic3} alt="" className='opacity-80'/>
-                            </div>
-                            {/* autumn */}
-                            <div className='flex justify-center items-center pt-7'>
-                                <h1 className='text-white text-2xl truncate'>Amber hush</h1>
-                            </div>
-                        </div>
-
-                        <div className='h-64 w-58 bg-gray-800 rounded-2xl'>
-                            <div className='w-full h-47 object-cover overflow-hidden rounded-tl-2xl rounded-tr-2xl'>
-                                <img src={listeningmusic4} alt="" className='opacity-80'/>
-                            </div>
-                            {/* winter */}
-
-                            <div className='flex justify-center items-center pt-7'>
-                                <h1 className='text-white text-2xl truncate '>Winter’s Veil</h1>
-                            </div>
-
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-
-
+          ))}
         </div>
-    )
-}
+      )}
 
-export default Homepage
+      {/* PLAYLIST CARD */}
+      <div className="flex justify-between items-center bg-[#0b0f19] p-6 rounded-3xl">
+        <div>
+          <h4 className="text-gray-300 italic text-2xl">
+            "Where memories turn into music."
+          </h4>
+        </div>
+
+        <BsArrowRight
+          onClick={() => navigatee("/playlistforu")}
+          className="text-white text-3xl cursor-pointer"
+        />
+      </div>
+
+      {/* ARTISTS */}
+      <div>
+        <h1 className="text-2xl text-white">Your Favourite Artists</h1>
+
+        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6 pt-5">
+          {artists.map((artist) => (
+            <div key={artist._id} className="flex flex-col items-center">
+              <img
+                className="w-24 h-24 rounded-full object-cover"
+                src={`http://localhost:5999/${artist.artistimge}`}
+                alt=""
+              />
+              <p className="text-white text-sm mt-2">{artist.artistname}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* SONGS */}
+      <div>
+        <h1 className="text-2xl text-white">Songs for you</h1>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-5 ">
+          {getasong.map((songdisplay) => (
+            <div
+              key={songdisplay._id}
+              className="flex gap-3 bg-gray-950 p-3 rounded-2xl "
+            >
+              <img
+                src={`http://localhost:5999/${songdisplay.songimage}`}
+                className="w-40 h-32 object-cover rounded-xl hover:scale-3d hover:scale-105 transition duration-150 "
+                alt=""
+              />
+
+              <div className="flex flex-col justify-between">
+                <div className="flex justify-end">
+                  <FaHeart className="text-red-400" />
+                </div>
+
+                <div>
+                  <h5 className="text-white">{songdisplay.songname}</h5>
+                  <p className="text-green-300 text-sm">{songdisplay.artist}</p>
+                </div>
+
+                {/* ✅ Only this changed */}
+                <div className="flex justify-end hover:scale-110 ">
+                  <CgPlayListAdd
+                    className="text-green-400 text-2xl cursor-pointer"
+                    onClick={() =>
+                      navigatee("/dashboard/playlist", {
+                        state: { songId: songdisplay._id },
+                      })
+                    }
+                  />
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Homepage;

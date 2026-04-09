@@ -13,6 +13,10 @@ import Categories from "./components/pages/categories/Categories";
 import Playlist from "./components/pages/playlist/Playlist";
 import Favorites from "./components/pages/favorites/Favorites";
 import Recents from "./components/pages/recents/Recents";
+import Weatherplaylist from "./components/subpages/weatherplaylist/Weatherplaylist";
+import PlaylistContent from "./components/subpages/playlistcontent/PlaylistContent";
+import MusicPlayer from "./components/subpages/musicplayer/MusicPlayer";
+import Playlistname from "./components/subpages/playlistcontent/Playlistname";
 
 function App() {
   const [islogin, setIslogin] = useState(false);
@@ -36,16 +40,14 @@ function App() {
           />
           <Route
             path="/dashboard"
-            element={islogin ? <MainDashboard /> : <Navigate to={"/"} />}>
-
-
+            element={islogin ? <MainDashboard /> : <Navigate to={"/"} />}
+          >
             <Route index element={<Homepage />} />
-            <Route  path="homepage" element={<Homepage />} />
+            <Route path="homepage" element={<Homepage />} />
             <Route path="categories" element={<Categories />} />
             <Route path="playlist" element={<Playlist />} />
             <Route path="favorites" element={<Favorites />} />
             <Route path="recents" element={<Recents />} />
-
             
           </Route>
 
@@ -53,6 +55,12 @@ function App() {
 
          
           </Route> */}
+
+          <Route path="/playlistforu" element={<Weatherplaylist />} />
+
+          <Route path="/urplaylist" element={<PlaylistContent/>}/>
+          <Route path="/musicplayer" element={<MusicPlayer/>}/>
+          <Route path="/playlistname" element={<Playlistname/>}/>
         </Routes>
       </BrowserRouter>
     </div>
