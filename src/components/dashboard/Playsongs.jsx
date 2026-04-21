@@ -12,16 +12,20 @@ import AudioPlayer from "react-h5-audio-player";
 import ReactAudioPlayer from "react-audio-player";
 import "react-h5-audio-player/lib/styles.css";
 import Homepage from "./Homepage";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 const Playsongs = () => {
+  const location = useLocation();
 
-const navigation=useNavigate()
+  const songplay = location.state?.songplay;
+
+  const navigation = useNavigate();
 
   const musicref = useRef(null);
   const [isplay, setIsplay] = useState(false);
 
   const [currentTime, setCurrettime] = useState(0);
   const [duration, setDuration] = useState(0);
+
   //playpause
   const playmusic = () => {
     musicref.current?.play();
@@ -62,20 +66,40 @@ const navigation=useNavigate()
   const [currentSong, setCurrentSong] = useState(null);
 
   useEffect(() => {
-    fetch("http://localhost:5999/authentication/getallsongs")
-      .then((res) => res.json())
-      .then((data) => {
-        console.log("songs:", data);
-        setSongs(data);
-        setCurrentSong(data[0]);
-      });
-  }, []);
+    if (songplay) {
+      setCurrentSong(songplay);
+    }
+  }, [songplay]);
+
+  // useEffect(() => {
+  //   fetch("http://localhost:5999/authentication/getallsongs")
+  //     .then((res) => res.json())
+  //     .then((data) => {
+  //       console.log("songs:", data);
+  //       setSongs(data);
+  //       setCurrentSong(data[0]);
+  //     });
+  // }, []);
+  // const musicplay=()=>{
+  //   try {
+  //     const musicplayapi
+  //   } catch (error) {
+
+  //   }
+  // }
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 bg-linear-to-t from-black/90 via-[#0b0f19]/80 to-transparent backdrop-blur-xl border-t border-white/10 px-6 py-3" >
+    <div className="fixed bottom-0 left-0 right-0 bg-linear-to-t from-black/90 via-[#0b0f19]/80 to-transparent backdrop-blur-xl border-t border-white/10 px-6 py-3">
       <div className="flex items-center justify-between">
         {/* LEFT - SONG INFO */}
-        <div className="flex items-center justify-between gap-4 cursor-pointer" onClick={()=>{ ; navigation("/musicplayer") }}>
+        <div
+          className="flex items-center justify-between gap-4 cursor-pointer"
+          onClick={() =>
+            navigation("/musicplayer", {
+              state: { songplay: currentSong },
+            })
+          }
+        >
           <div className="w-14 h-14 rounded-lg overflow-hidden">
             <img
               src={`http://localhost:5999/${currentSong?.songimage}`}
@@ -103,7 +127,10 @@ const navigation=useNavigate()
             </button>
 
             <button
-              onClick={(e)=>{ e.stopPropagation(); musicplaypause()}}
+              onClick={(e) => {
+                e.stopPropagation();
+                musicplaypause();
+              }}
               className="bg-white text-black p-2 rounded-full hover:scale-110 active:scale-95 transition"
             >
               {isplay ? (
@@ -130,7 +157,7 @@ const navigation=useNavigate()
               max={duration || 0}
               value={currentTime}
               onChange={(e) => {
-                 e.stopPropagation()
+                e.stopPropagation();
                 musicref.current.currentTime = e.target.value;
                 setCurrettime(e.target.value);
               }}
@@ -153,7 +180,7 @@ const navigation=useNavigate()
             max="1"
             step="0.01"
             onChange={(e) => {
-               e.stopPropagation()
+              e.stopPropagation();
               musicref.current.volume = e.target.value;
             }}
             className="w-24 h-1 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-green-500"
@@ -164,7 +191,9 @@ const navigation=useNavigate()
       {/* AUDIO */}
       <audio
         src={
-          currentSong ? `http://localhost:5999/uploads/${currentSong.file}` :"sooo"
+          currentSong
+            ? `http://localhost:5999/uploads/${currentSong.file}`
+            : "sooo"
         }
         ref={musicref}
         onTimeUpdate={settingCurrentTime}

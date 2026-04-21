@@ -13,6 +13,7 @@ import Playlistname from "./components/subpages/playlistcontent/Playlistname";
 import PlaylistContent from "./components/subpages/playlistcontent/PlaylistContent";
 import Weatherplaylist from "./components/subpages/weatherplaylist/Weatherplaylist";
 import MusicPlayer from "./components/subpages/musicplayer/MusicPlayer";
+import Playsongs from "./components/dashboard/Playsongs";
 
 function App() {
   const [islogin, setIslogin] = useState(
@@ -58,6 +59,7 @@ function App() {
             <Route  path="/urplaylist" element={<PlaylistContent/>} />
             <Route  path="/playlistforu" element={<Weatherplaylist/>}/> 
             <Route path="/musicplayer" element={<MusicPlayer/>}/>
+            <Route path="/playsong" element={<Playsongs/>}/>
         </Routes>
       </BrowserRouter>
     </div>

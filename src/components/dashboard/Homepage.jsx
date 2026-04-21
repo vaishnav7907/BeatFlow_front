@@ -136,6 +136,11 @@ const Homepage = () => {
             <div
               key={songdisplay._id}
               className="flex gap-3 bg-gray-950 p-3 rounded-2xl "
+              onClick={() =>
+                navigatee("/musicplayer", {
+                  state: { songplay: songdisplay },
+                })
+              }
             >
               <img
                 src={`http://localhost:5999/${songdisplay.songimage}`}
@@ -147,7 +152,7 @@ const Homepage = () => {
                 <div className="flex justify-end">
                   <FaHeart
                     className="text-red-400 cursor-pointer"
-                    onClick={() => addalltofav(songdisplay._id)}
+                    onClick={(e) =>{e.stopPropagation(); addalltofav(songdisplay._id)}}
                   />
                 </div>
 

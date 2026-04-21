@@ -6,7 +6,12 @@ import { FaRegCirclePause } from "react-icons/fa6";
 import img from "../../../assets/welcomepageimg/vv.png";
 import { FaArrowLeftLong } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 const MusicPlayer = () => {
+  const location = useLocation();
+  const song = location.state?.songplay;
+  console.log(song);
+  
   const musicref = useRef(null);
   const [isplay, setIsplay] = useState(false);
 
@@ -48,7 +53,13 @@ const MusicPlayer = () => {
     return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
   };
 
-const navigation = useNavigate()
+  const navigation = useNavigate();
+  useEffect(() => {
+    if (song && musicref.current) {
+      musicref.current.play();
+      setIsplay(true);
+    }
+  }, [song]);
 
   return (
     <div className="bg-black w-full h-screen p-6 ">
@@ -64,7 +75,7 @@ const navigation = useNavigate()
         <div className="w-1/2 flex items-center justify-center">
           <div className=" w-96 h-96 bg-amber-600 rounded-3xl">
             <img
-              src={img}
+              src={`http://localhost:5999/${song.songimage}`}
               alt="music"
               className="h-full w-full object-cover rounded-3xl"
             />
@@ -73,9 +84,8 @@ const navigation = useNavigate()
         <div className="w-full ">
           <div className="flex flex-col items-center ">
             <div>
-              <h5 className="text-white">songs</h5>
-
-              <p className="text-white">artist</p>
+              <h5 className="text-white">{song?.songname || "No song"}</h5>
+              <p className="text-white">{song?.artist || "Unknown"}</p>
             </div>
             {/* CONTROLS */}
             <div className="flex items-center gap-6 mb-2 pt-4">
@@ -121,6 +131,12 @@ const navigation = useNavigate()
                 {formatTime(duration)}
               </span>
             </div>
+            <audio className="hidden"
+              ref={musicref}
+              src={`http://localhost:5999/${song?.file.replace(/\\/g, "/")}`}
+              onTimeUpdate={settingCurrentTime}
+              onLoadedMetadata={settingDuration}
+            />
           </div>
         </div>
       </div>
