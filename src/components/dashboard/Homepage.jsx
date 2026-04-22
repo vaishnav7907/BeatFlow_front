@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from "react";
 import "../dashboard/Homepage.css";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useOutletContext } from "react-router-dom";
 import { FaHeart } from "react-icons/fa";
 import { BsArrowRight } from "react-icons/bs";
 import { CgPlayListAdd } from "react-icons/cg";
 import { IoIosLogOut } from "react-icons/io";
 const Homepage = () => {
+
+const {setCurrentSong}= useOutletContext()   //outlet loode prp pass cheyyumbol ingane ahn destructure cheycth edukkunnath
+
   const navigatee = useNavigate();
   const logout = () => {
     localStorage.removeItem("token");
@@ -136,11 +139,7 @@ const Homepage = () => {
             <div
               key={songdisplay._id}
               className="flex gap-3 bg-gray-950 p-3 rounded-2xl "
-              onClick={() =>
-                navigatee("/musicplayer", {
-                  state: { songplay: songdisplay },
-                })
-              }
+              onClick={() => setCurrentSong(songdisplay)}
             >
               <img
                 src={`http://localhost:5999/${songdisplay.songimage}`}
@@ -152,7 +151,10 @@ const Homepage = () => {
                 <div className="flex justify-end">
                   <FaHeart
                     className="text-red-400 cursor-pointer"
-                    onClick={(e) =>{e.stopPropagation(); addalltofav(songdisplay._id)}}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      addalltofav(songdisplay._id);
+                    }}
                   />
                 </div>
 

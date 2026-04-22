@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 const MusicPlayer = () => {
   const location = useLocation();
-  const song = location.state?.songplay;
+  const song = location.state?.currentSong;
   console.log(song);
   
   const musicref = useRef(null);

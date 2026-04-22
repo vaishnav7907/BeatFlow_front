@@ -21,7 +21,7 @@ const MainDashboard = () => {
 
 
 const navigate = useNavigate()
-
+const [currentSong, setCurrentSong] = useState(null);
   
 
   return (
@@ -48,13 +48,13 @@ const navigate = useNavigate()
         {/* main content */}
 
         <div className="h-screen  grow  p-8 overflow-y-auto scroll-smooth pb-20 ">
-          <Outlet />
+          <Outlet context={{ setCurrentSong }}/>
         </div>
       </div>
 
       {/* music player */}
       <div className="   " >
-        <Playsongs />
+        <Playsongs currentSong={currentSong}/>
       </div>
     </div>
   );

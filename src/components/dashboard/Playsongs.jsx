@@ -1,42 +1,53 @@
 import React, { useEffect, useRef, useState } from "react";
-import vv from "../../assets/welcomepageimg/vv.png";
-// import { PiShuffleFill } from "react-icons/pi";
-import { IoPlaySkipBackOutline } from "react-icons/io5";
-import { IoPlaySkipForwardOutline } from "react-icons/io5";
-import { FaRegCirclePlay } from "react-icons/fa6";
-import { FaRegCirclePause } from "react-icons/fa6";
+import { IoPlaySkipBackOutline, IoPlaySkipForwardOutline } from "react-icons/io5";
+import { FaRegCirclePlay, FaRegCirclePause } from "react-icons/fa6";
 import { FiVolume2 } from "react-icons/fi";
-// import { FiVolumeX } from "react-icons/fi";
-import ReactPlayer from "react-player";
-import AudioPlayer from "react-h5-audio-player";
-import ReactAudioPlayer from "react-audio-player";
-import "react-h5-audio-player/lib/styles.css";
-import Homepage from "./Homepage";
 import { useLocation, useNavigate } from "react-router-dom";
-const Playsongs = () => {
-  const location = useLocation();
 
-  const songplay = location.state?.songplay;
-
+const Playsongs = ({currentSong}) => {
+  
   const navigation = useNavigate();
 
   const musicref = useRef(null);
-  const [isplay, setIsplay] = useState(false);
 
+  const [isplay, setIsplay] = useState(false);
   const [currentTime, setCurrettime] = useState(0);
   const [duration, setDuration] = useState(0);
+  // const [currentSong, setCurrentSong] = useState(null);
 
-  //playpause
-  const playmusic = () => {
-    musicref.current?.play();
-    setIsplay(true);
+  // ✅ set song from navigation
+  // useEffect(() => {
+  //   if (songplay) {
+  //     setCurrentSong(songplay);
+  //     setIsplay(false);
+  //   }
+  // }, [songplay]);
+
+  // ✅ autoplay when song changes
+  useEffect(() => {
+    if (currentSong && musicref.current) {
+      musicref.current.load();
+      playmusic();
+    }
+  }, [currentSong]);
+
+  // ▶️ play
+  const playmusic = async () => {
+    try {
+      await musicref.current?.play();
+      setIsplay(true);
+    } catch (err) {
+      console.log("Play failed:", err);
+    }
   };
 
+  // ⏸ pause
   const pausemusic = () => {
     musicref.current?.pause();
     setIsplay(false);
   };
 
+  // 🔁 toggle
   const musicplaypause = () => {
     if (isplay) {
       pausemusic();
@@ -45,58 +56,38 @@ const Playsongs = () => {
     }
   };
 
+  // ⏱ update time
   const settingCurrentTime = () => {
-    setCurrettime(musicref.current.currentTime);
+    if (musicref.current) {
+      setCurrettime(musicref.current.currentTime);
+    }
   };
 
+  // ⏱ duration
   const settingDuration = () => {
-    setDuration(musicref.current.duration);
+    if (!isNaN(musicref.current.duration)) {
+      setDuration(musicref.current.duration);
+    }
   };
 
-  //format time (9:00)
-
+  // 🧮 format time
   const formatTime = (time) => {
+    if (!time) return "0:00";
     const minutes = Math.floor(time / 60);
     const seconds = Math.floor(time % 60);
-
     return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
   };
 
-  const [songs, setSongs] = useState([]);
-  const [currentSong, setCurrentSong] = useState(null);
-
-  useEffect(() => {
-    if (songplay) {
-      setCurrentSong(songplay);
-    }
-  }, [songplay]);
-
-  // useEffect(() => {
-  //   fetch("http://localhost:5999/authentication/getallsongs")
-  //     .then((res) => res.json())
-  //     .then((data) => {
-  //       console.log("songs:", data);
-  //       setSongs(data);
-  //       setCurrentSong(data[0]);
-  //     });
-  // }, []);
-  // const musicplay=()=>{
-  //   try {
-  //     const musicplayapi
-  //   } catch (error) {
-
-  //   }
-  // }
-
   return (
-    <div className="fixed bottom-0 left-0 right-0 bg-linear-to-t from-black/90 via-[#0b0f19]/80 to-transparent backdrop-blur-xl border-t border-white/10 px-6 py-3">
-      <div className="flex items-center justify-between">
-        {/* LEFT - SONG INFO */}
+    <div className="fixed bottom-0 left-0 right-0 bg-black/90 backdrop-blur-xl border-t border-white/10 px-6 py-3">
+      <div className="flex items-center justify-between w-full">
+
+        {/* LEFT */}
         <div
-          className="flex items-center justify-between gap-4 cursor-pointer"
+          className="flex items-center gap-4 cursor-pointer"
           onClick={() =>
             navigation("/musicplayer", {
-              state: { songplay: currentSong },
+              state: { currentSong },
             })
           }
         >
@@ -118,12 +109,11 @@ const Playsongs = () => {
           </div>
         </div>
 
-        {/* CENTER - CONTROLS + PROGRESS */}
-        <div className="flex flex-col items-center w-2/4">
-          {/* CONTROLS */}
+        {/* CENTER */}
+        <div className="flex flex-col items-center w-full">
           <div className="flex items-center gap-6 mb-2">
-            <button className="text-gray-400 hover:text-white transition">
-              <IoPlaySkipBackOutline className="w-5 h-5" />
+            <button className="text-gray-400 hover:text-white">
+              <IoPlaySkipBackOutline />
             </button>
 
             <button
@@ -131,21 +121,17 @@ const Playsongs = () => {
                 e.stopPropagation();
                 musicplaypause();
               }}
-              className="bg-white text-black p-2 rounded-full hover:scale-110 active:scale-95 transition"
+              className="bg-white text-black p-2 rounded-full"
             >
-              {isplay ? (
-                <FaRegCirclePause className="w-6 h-6" />
-              ) : (
-                <FaRegCirclePlay className="w-6 h-6" />
-              )}
+              {isplay ? <FaRegCirclePause /> : <FaRegCirclePlay />}
             </button>
 
-            <button className="text-gray-400 hover:text-white transition">
-              <IoPlaySkipForwardOutline className="w-5 h-5" />
+            <button className="text-gray-400 hover:text-white">
+              <IoPlaySkipForwardOutline />
             </button>
           </div>
 
-          {/* PROGRESS BAR */}
+          {/* PROGRESS */}
           <div className="flex items-center gap-3 w-full max-w-xl">
             <span className="text-xs text-gray-400 w-10 text-right">
               {formatTime(currentTime)}
@@ -158,10 +144,11 @@ const Playsongs = () => {
               value={currentTime}
               onChange={(e) => {
                 e.stopPropagation();
-                musicref.current.currentTime = e.target.value;
-                setCurrettime(e.target.value);
+                const value = Number(e.target.value);
+                musicref.current.currentTime = value;
+                setCurrettime(value);
               }}
-              className="w-full h-1 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-green-500"
+              className="w-full"
             />
 
             <span className="text-xs text-gray-400 w-10">
@@ -170,9 +157,9 @@ const Playsongs = () => {
           </div>
         </div>
 
-        {/* RIGHT - VOLUME */}
+        {/* RIGHT */}
         <div className="flex items-center gap-3 w-1/4 justify-end">
-          <FiVolume2 className="text-white w-5 h-5" />
+          <FiVolume2 className="text-white" />
 
           <input
             type="range"
@@ -181,23 +168,20 @@ const Playsongs = () => {
             step="0.01"
             onChange={(e) => {
               e.stopPropagation();
-              musicref.current.volume = e.target.value;
+              musicref.current.volume = Number(e.target.value);
             }}
-            className="w-24 h-1 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-green-500"
+            className="w-24"
           />
         </div>
       </div>
 
       {/* AUDIO */}
       <audio
-        src={
-          currentSong
-            ? `http://localhost:5999/uploads/${currentSong.file}`
-            : "sooo"
-        }
         ref={musicref}
+       src={`http://localhost:5999/${currentSong?.file.replace(/\\/g, "/")}`}
         onTimeUpdate={settingCurrentTime}
         onLoadedMetadata={settingDuration}
+        onEnded={() => setIsplay(false)}
         className="hidden"
       />
     </div>
