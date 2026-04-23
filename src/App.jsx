@@ -12,8 +12,10 @@ import Recents from "./components/pages/recents/Recents";
 import Playlistname from "./components/subpages/playlistcontent/Playlistname";
 import PlaylistContent from "./components/subpages/playlistcontent/PlaylistContent";
 import Weatherplaylist from "./components/subpages/weatherplaylist/Weatherplaylist";
-import MusicPlayer from "./components/subpages/musicplayer/MusicPlayer";
+// import MusicPlayer from "./components/subpages/musicplayer/MusicPlayer";
 import Playsongs from "./components/dashboard/Playsongs";
+import { Playerprovider } from "./components/context/Playerprovider";
+
 
 function App() {
   const [islogin, setIslogin] = useState(
@@ -21,7 +23,9 @@ function App() {
   );
 
   return (
+
     <div className="h-screen w-screen">
+      <Playerprovider>
       <BrowserRouter>
         <Routes>
 
@@ -46,22 +50,25 @@ function App() {
           {/* DASHBOARD */}
           <Route
             path="/dashboard"
-            element={islogin ? <MainDashboard /> : <Navigate to="/" />}
-          >
+            element={islogin ? <MainDashboard /> : <Navigate to="/" />}>
             <Route index element={<Homepage />} />
             <Route path="homepage" element={<Homepage />} />
             <Route path="categories" element={<Categories />} />
             <Route path="playlist" element={<Playlist />} />
             <Route path="favorites" element={<Favorites />} />
             <Route path="recents" element={<Recents />} />
+            {/* <Route  path="urplaylist" element={<PlaylistContent/>} /> */}
           </Route>
+
+
             <Route path="/playlistname" element={<Playlistname/>}/>
             <Route  path="/urplaylist" element={<PlaylistContent/>} />
             <Route  path="/playlistforu" element={<Weatherplaylist/>}/> 
-            <Route path="/musicplayer" element={<MusicPlayer/>}/>
+            {/* <Route path="/musicplayer" element={<MusicPlayer/>}/> */}
             <Route path="/playsong" element={<Playsongs/>}/>
         </Routes>
       </BrowserRouter>
+      </Playerprovider>
     </div>
   );
 }

@@ -3,8 +3,9 @@ import { GoPlus } from "react-icons/go";
 import { FaArrowLeftLong } from "react-icons/fa6";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import imges from "../../../assets/welcomepageimg/vv.png";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useOutletContext,  } from "react-router-dom";
 import axios from "axios";
+import { useplayer } from "../../context/Playerprovider";
 
 const PlaylistContent = () => {
   const navigation = useNavigate();
@@ -20,10 +21,14 @@ const PlaylistContent = () => {
     setGetallsongs(getallsongsapi.data.songs);
   };
   useEffect(() => {
-  if (playlistId) {
-    getallplaylistSongs();
-  }
-}, [playlistId]);
+    if (playlistId) {
+      getallplaylistSongs();
+    }
+  }, [playlistId]);
+
+  const { setCurrentSong, setSonglist, setCurrentindex } = useplayer();
+ 
+
   return (
     <div className="bg-[#0b0f19] min-h-screen p-6 text-white">
       {/* HEADER */}
@@ -51,6 +56,7 @@ const PlaylistContent = () => {
           <div
             key={dothing._id}
             className="flex items-center justify-between px-4 py-3 rounded-xl hover:bg-white/10 transition duration-300 group"
+           
           >
             {/* LEFT */}
             <div className="flex items-center gap-4">

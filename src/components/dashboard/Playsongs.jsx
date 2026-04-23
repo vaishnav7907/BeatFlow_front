@@ -1,11 +1,16 @@
 import React, { useEffect, useRef, useState } from "react";
-import { IoPlaySkipBackOutline, IoPlaySkipForwardOutline } from "react-icons/io5";
+import {
+  IoPlaySkipBackOutline,
+  IoPlaySkipForwardOutline,
+} from "react-icons/io5";
 import { FaRegCirclePlay, FaRegCirclePause } from "react-icons/fa6";
 import { FiVolume2 } from "react-icons/fi";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useplayer } from "../context/Playerprovider";
 
-const Playsongs = ({currentSong}) => {
-  
+const Playsongs = () => {
+    const {currentSong,setCurrentSong,songlist,currentindex,setCurrentindex,} = useplayer();
+
   const navigation = useNavigate();
 
   const musicref = useRef(null);
@@ -56,6 +61,22 @@ const Playsongs = ({currentSong}) => {
     }
   };
 
+  // forward song button
+  const forwardsong = () => {
+    if (!songlist.length) return;
+    const nextindex = (currentindex + 1) % songlist.length;
+    setCurrentindex(nextindex);
+    setCurrentSong(songlist[nextindex]);
+  };
+
+  //backward song button
+  const backwardsong = () => {
+    if(!songlist.length) return
+    const previndex= (currentindex - 1 + songlist.length) % songlist.length
+    setCurrentindex(previndex)
+    setCurrentSong(songlist[previndex])
+  }
+
   // ⏱ update time
   const settingCurrentTime = () => {
     if (musicref.current) {
@@ -81,15 +102,14 @@ const Playsongs = ({currentSong}) => {
   return (
     <div className="fixed bottom-0 left-0 right-0 bg-black/90 backdrop-blur-xl border-t border-white/10 px-6 py-3">
       <div className="flex items-center justify-between w-full">
-
         {/* LEFT */}
         <div
           className="flex items-center gap-4 cursor-pointer"
-          onClick={() =>
-            navigation("/musicplayer", {
-              state: { currentSong },
-            })
-          }
+          // onClick={() =>
+          //   navigation("/musicplayer", {
+          //     state: { currentSong },
+          //   })
+          // }
         >
           <div className="w-14 h-14 rounded-lg overflow-hidden">
             <img
@@ -113,7 +133,7 @@ const Playsongs = ({currentSong}) => {
         <div className="flex flex-col items-center w-full">
           <div className="flex items-center gap-6 mb-2">
             <button className="text-gray-400 hover:text-white">
-              <IoPlaySkipBackOutline />
+              <IoPlaySkipBackOutline  onClick={backwardsong}/>
             </button>
 
             <button
@@ -127,7 +147,7 @@ const Playsongs = ({currentSong}) => {
             </button>
 
             <button className="text-gray-400 hover:text-white">
-              <IoPlaySkipForwardOutline />
+              <IoPlaySkipForwardOutline onClick={forwardsong} />
             </button>
           </div>
 
@@ -178,7 +198,7 @@ const Playsongs = ({currentSong}) => {
       {/* AUDIO */}
       <audio
         ref={musicref}
-       src={`http://localhost:5999/${currentSong?.file.replace(/\\/g, "/")}`}
+        src={`http://localhost:5999/${currentSong?.file.replace(/\\/g, "/")}`}
         onTimeUpdate={settingCurrentTime}
         onLoadedMetadata={settingDuration}
         onEnded={() => setIsplay(false)}

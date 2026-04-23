@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { GoPlus } from "react-icons/go";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import imges from "../../../assets/welcomepageimg/vv.png";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, Outlet, useOutletContext } from "react-router-dom";
 import axios from "axios";
 import { BiLogInCircle } from "react-icons/bi";
 
@@ -71,6 +71,8 @@ const Playlist = () => {
       console.log(error);
     }
   };
+
+
 
   return (
     <div>
@@ -151,9 +153,14 @@ const Playlist = () => {
             <div className="flex justify-end mt-6">
               <div
                 className="opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition duration-300"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  navigation("/urplaylist",{ state: { playlistId: item._id } });
+                onClick={() => {
+                 
+                  navigation("/urplaylist", {
+                    state: {
+                      playlistId: item._id,
+                      
+                    },
+                  });
                 }}
               >
                 <div className="bg-white text-black p-2 rounded-full hover:scale-110 transition">
@@ -164,6 +171,7 @@ const Playlist = () => {
           </div>
         ))}
       </div>
+      <Outlet />
     </div>
   );
 };

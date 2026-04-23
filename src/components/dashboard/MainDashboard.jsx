@@ -21,8 +21,11 @@ const MainDashboard = () => {
 
 
 const navigate = useNavigate()
-const [currentSong, setCurrentSong] = useState(null);
+// const [currentSong, setCurrentSong] = useState(null);
+// const [songlist , setSonglist]= useState([])
+// const [currentindex,setCurrentindex]= useState(0)
   
+
 
   return (
     <div className=" bg-black min-h-screen w-screen   flex flex-col ">
@@ -48,13 +51,15 @@ const [currentSong, setCurrentSong] = useState(null);
         {/* main content */}
 
         <div className="h-screen  grow  p-8 overflow-y-auto scroll-smooth pb-20 ">
-          <Outlet context={{ setCurrentSong }}/>
+          <Outlet />
+          {/* context={{ setCurrentSong , setCurrentindex, setSonglist }} */}
         </div>
       </div>
 
       {/* music player */}
       <div className="   " >
-        <Playsongs currentSong={currentSong}/>
+        <Playsongs  />      
+        {/* currentSong={currentSong}  setCurrentSong={setCurrentSong} songlist={songlist}  currentindex={currentindex} setCurrentindex={setCurrentindex} */}
       </div>
     </div>
   );

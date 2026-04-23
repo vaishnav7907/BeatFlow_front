@@ -6,9 +6,12 @@ import { FaHeart } from "react-icons/fa";
 import { BsArrowRight } from "react-icons/bs";
 import { CgPlayListAdd } from "react-icons/cg";
 import { IoIosLogOut } from "react-icons/io";
+import { useplayer } from "../context/Playerprovider";
 const Homepage = () => {
 
-const {setCurrentSong}= useOutletContext()   //outlet loode prp pass cheyyumbol ingane ahn destructure cheycth edukkunnath
+// const {setCurrentSong , setCurrentindex, setSonglist}= useOutletContext()   //outlet loode prop pass cheyyumbol ingane ahn destructure cheycth edukkunnath
+
+ const { setCurrentSong, setCurrentindex, setSonglist } = useplayer();
 
   const navigatee = useNavigate();
   const logout = () => {
@@ -135,11 +138,15 @@ const {setCurrentSong}= useOutletContext()   //outlet loode prp pass cheyyumbol 
         <h1 className="text-2xl text-white">Songs for you</h1>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-5 ">
-          {getasong.map((songdisplay) => (
+          {getasong.map((songdisplay,index) => (
             <div
               key={songdisplay._id}
               className="flex gap-3 bg-gray-950 p-3 rounded-2xl "
-              onClick={() => setCurrentSong(songdisplay)}
+              onClick={() => {
+                setCurrentSong(songdisplay)
+                setSonglist(getasong)
+                setCurrentindex(index)
+              }}
             >
               <img
                 src={`http://localhost:5999/${songdisplay.songimage}`}
