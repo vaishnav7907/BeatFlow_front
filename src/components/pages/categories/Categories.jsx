@@ -1,11 +1,16 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { IoSearch } from "react-icons/io5";
-
+import { useplayer } from "../../context/Playerprovider";
+import { CgPlayListAdd } from "react-icons/cg";
+import { FaHeart } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 const Categories = () => {
   const [query, setQuery] = useState("");
   const [songs, setSongs] = useState([]);
   const [searched, setSearched] = useState(false);
+
+  const navigate = useNavigate();
 
   // 🔍 API CALL
   const handleSearch = async (searchText) => {
@@ -18,7 +23,7 @@ const Categories = () => {
       }
 
       const res = await axios.get(
-        `http://localhost:5999/authentication/searchsongs?query=${q}`
+        `http://localhost:5999/authentication/searchsongs?query=${q}`,
       );
 
       setSongs(res.data);
@@ -37,10 +42,53 @@ const Categories = () => {
     return () => clearTimeout(delay);
   }, [query]);
 
+  const { setCurrentSong, setSonglist, setCurrentindex } = useplayer();
+
+  // add to fav
+
+  const addalltofav = async (songId) => {
+    try {
+      const token = localStorage.getItem("token");
+
+      await axios.post(
+        "http://localhost:5999/authentication/addtofav",
+        { songId },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+
+      alert("✅ Song added to favourites");
+    } catch (error) {
+      console.log("Favourite error", error.response?.data || error);
+    }
+  };
+
+  //add to playlist
+
+  const addSongToPlaylist = async (playlistId) => {
+    if (!songId) {
+      // navigation("/urplaylist");
+      return;
+    }
+
+    try {
+      await axios.post("http://localhost:5999/authentication/addsongplaylist", {
+        playlistId,
+        songId,
+      });
+
+      alert("✅ Song added!");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div>
       <div className="flex flex-col gap-7">
-        
         {/* Heading */}
         <div>
           <h1 className="text-4xl text-white mb-2">Discover Music</h1>
@@ -69,25 +117,59 @@ const Categories = () => {
 
         {/* 🎵 Results */}
         <div>
-          {searched && (
-            songs.length > 0 ? (
-              songs.map((song) => (
+          {searched &&
+            (songs.length > 0 ? (
+              songs.map((song, index) => (
                 <div
                   key={song._id}
-                  className="text-white mt-3 p-3 bg-gray-900 rounded-lg hover:bg-gray-950 "
+                  className="text-white mt-3 h-20 w-full pl-2 pr-5 bg-gray-900 rounded-lg hover:bg-gray-950  flex justify-between items-center"
+                  onClick={() => {
+                    setCurrentSong(songs[index]);
+                    setSonglist(songs);
+                    setCurrentindex(index);
+                  }}
                 >
-                  <h3 className="text-lg font-semibold  ">
-                    {song.songname || song.title}
-                  </h3>
-                  <p className="text-gray-400">
-                    {song.artist || "Unknown Artist"}
-                  </p>
+                  <div className="flex gap-5">
+                    <div className="w-16 h-16">
+                      <img
+                        src={`http://localhost:5999/${song.songimage}`}
+                        alt=""
+                        className="rounded-lg h-full w-full object-cover"
+                      />
+                    </div>
+
+                    <div>
+                      <h3 className="text-lg font-semibold  ">
+                        {song.songname || song.title}
+                      </h3>
+                      <p className="text-gray-400">
+                        {song.artist || "Unknown Artist"}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex gap-5">
+                    <FaHeart
+                      className="text-red-400 cursor-pointer"
+                      onClick={(e) => {
+                        (e.stopPropagation(), addalltofav(song._id));
+                      }}
+                    />
+
+                    <CgPlayListAdd
+                      className="text-green-400 text-2xl cursor-pointer"
+                      onClick={(e) => {
+                        navigate("/dashboard/playlist", {
+                          state: { songId: song._id },
+                        });
+                      }}
+                    />
+                  </div>
                 </div>
               ))
             ) : (
               <p className="text-gray-500 mt-3">No songs found</p>
-            )
-          )}
+            ))}
         </div>
 
         {/* 🎼 Categories */}
@@ -105,7 +187,6 @@ const Categories = () => {
             Hindi
           </button>
         </div> */}
-
       </div>
     </div>
   );

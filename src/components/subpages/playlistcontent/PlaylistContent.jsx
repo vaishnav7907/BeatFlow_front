@@ -2,12 +2,13 @@ import React, { useEffect, useState } from "react";
 import { GoPlus } from "react-icons/go";
 import { FaArrowLeftLong } from "react-icons/fa6";
 import { BsThreeDotsVertical } from "react-icons/bs";
-import imges from "../../../assets/welcomepageimg/vv.png";
+
 import { useLocation, useNavigate, useOutletContext } from "react-router-dom";
 import axios from "axios";
-import { useplayer } from "../../context/Playerprovider";
+
 import Playsongs from "../../dashboard/Playsongs";
 import { FaHeart } from "react-icons/fa";
+import { useplayer } from "../../context/Playerprovider";
 
 const PlaylistContent = () => {
   const navigation = useNavigate();
@@ -28,7 +29,7 @@ const PlaylistContent = () => {
     }
   }, [playlistId]);
 
-  const { setCurrentSong, setSonglist, setCurrentindex } = useplayer();
+  const { setCurrentSong, setSonglist, setCurrentindex } =useplayer();
 
   const [playlistplay, setPlaylistplay] = useState(false);
 
@@ -73,10 +74,10 @@ const PlaylistContent = () => {
             key={dothing._id}
             className="flex items-center justify-between px-4 py-3 rounded-xl hover:bg-white/10 transition duration-300 group"
             onClick={() => {
-              (setPlaylistplay(true),
+              setPlaylistplay(true),
                 setSonglist(getallsongs),
                 setCurrentindex(index),
-                setCurrentSong(getallsongs[index]));
+                setCurrentSong(getallsongs[index]);
             }}
           >
             {/* LEFT */}
@@ -87,7 +88,7 @@ const PlaylistContent = () => {
               {/* IMAGE */}
               <div className="w-12 h-12 rounded-lg overflow-hidden shadow">
                 <img
-                  src={imges}
+                  src={`http://localhost:5999/${dothing.songimage}`}
                   alt="song"
                   className="w-full h-full object-cover group-hover:scale-105 transition duration-300"
                 />
