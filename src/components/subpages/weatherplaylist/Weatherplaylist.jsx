@@ -75,7 +75,7 @@ const Weatherplaylist = () => {
 
                 {/* WEATHER CARD */}
                 <div className="mb-12 p-6 rounded-3xl bg-white/5 backdrop-blur-lg border border-white/10 shadow-lg">
-                  <h2 className="text-2xl font-semibold">🌧 Rainy Mood</h2>
+                  <h2 className="text-2xl font-semibold">{weathertype}</h2>
                   <p className="text-gray-400 mt-1">
                     Perfect for calm & emotional tracks
                   </p>
