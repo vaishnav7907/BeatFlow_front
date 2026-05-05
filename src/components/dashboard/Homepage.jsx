@@ -8,6 +8,7 @@ import { CgPlayListAdd } from "react-icons/cg";
 import { IoIosLogOut } from "react-icons/io";
 import { useplayer } from "../context/Playerprovider";
 import Playsongs from "./Playsongs";
+import { SlArrowRight } from "react-icons/sl";
 const Homepage = () => {
   // const {setCurrentSong , setCurrentindex, setSonglist}= useOutletContext()   //outlet loode prop pass cheyyumbol ingane ahn destructure cheycth edukkunnath
 
@@ -73,7 +74,6 @@ const Homepage = () => {
     }
   };
   const [playsongss, setplaysongss] = useState(false);
-
 
   return (
     <div className="w-full flex flex-col gap-9 min-h-screen">
@@ -145,17 +145,23 @@ const Homepage = () => {
       <div>
         <h1 className="text-2xl text-white"> Artists</h1>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6 pt-5">
-          {artists.map((artist) => (
-            <div key={artist._id} className="flex flex-col items-center">
-              <img
-                className="w-24 h-24 rounded-full object-cover"
-                src={`${import.meta.env.VITE_API_URL}/${artist.artistimge}`}
-                alt="nnn"
-              />
-              <p className="text-white text-sm mt-2">{artist.artistname}</p>
-            </div>
-          ))}
+        <div className="flex items-center justify-around">
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6 pt-5">
+            {artists.map((artist) => (
+              <div key={artist._id} className="flex flex-col items-center">
+                <img
+                  className="w-24 h-24 rounded-full object-cover"
+                  src={`${import.meta.env.VITE_API_URL}/${artist.artistimge}`}
+                  alt="nnn"
+                />
+                <p className="text-white text-sm mt-2">{artist.artistname}</p>
+              </div>
+            ))}
+          </div>
+
+          <div className="text-white " onClick={()=>navigatee("/artistpage")}>
+            <button><SlArrowRight size={25}/></button>
+          </div>
         </div>
       </div>
 
@@ -172,7 +178,7 @@ const Homepage = () => {
                 setCurrentSong(songdisplay);
                 setSonglist(getasong);
                 setCurrentindex(index);
-                setplaysongss (true);
+                setplaysongss(true);
               }}
             >
               <img

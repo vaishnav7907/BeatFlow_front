@@ -19,6 +19,7 @@ import RetroVibes from "./components/subpages/Playlistforu/RetroVibes/RetroVibes
 import PlaylistTou from "./components/subpages/Playlistforu/playlisttou/PlaylistTou";
 import TopTracks from "./components/subpages/Playlistforu/TopTracks/TopTracks";
 import TrendingSongs from "./components/subpages/Playlistforu/TrendingSongs/TrendingSongs";
+import Artistpage from "./components/subpages/artistpage/Artistpage";
 
 function App() {
   const [islogin, setIslogin] = useState(!!localStorage.getItem("token"));
@@ -68,6 +69,8 @@ function App() {
             ////
             {/* <Route path="/musicplayer" element={<MusicPlayer/>}/> */}
             <Route path="/playsong" element={<Playsongs />} />
+
+            <Route path="/artistpage" element={<Artistpage/>}/>
           </Routes>
         </BrowserRouter>
       </Playerprovider>
