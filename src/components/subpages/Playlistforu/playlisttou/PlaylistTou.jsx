@@ -12,9 +12,9 @@ const PlaylistTou = () => {
           <Playlistsidebar />
         </div>
 
-        <div className="w-full h-screen overflow-auto scroll-smooth">
-          {/* <Weatherplaylist /> */}
-          {/* <RetroVibes/> */}
+        <div className="w-full h-screen overflow-auto">
+          {/* <Weatherplaylist />
+          <RetroVibes/> */}
           <Outlet/>
         </div>
       </div>

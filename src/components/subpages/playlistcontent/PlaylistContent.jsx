@@ -29,22 +29,35 @@ const PlaylistContent = () => {
     }
   }, [playlistId]);
 
-  const { setCurrentSong, setSonglist, setCurrentindex } =useplayer();
+  const dltplaylistsong = async (songid) => {
+    try {
+      const deleteapi = await axios.delete(
+        `${import.meta.env.VITE_API_URL}/Beatflow/dltplaylistsong/${playlistId}/${songid}`,
+      );
+
+      setGetallsongs((sng) => sng.filter((item) => item._id !== songid));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const { setCurrentSong, setSonglist, setCurrentindex } = useplayer();
 
   const [playlistplay, setPlaylistplay] = useState(false);
 
-
-
-
-  const addtofav= async (songId) => {
+  const addtofav = async (songId) => {
     try {
-      const token=localStorage.getItem("token")
-      await axios.post(`${import.meta.env.VITE_API_URL}/Beatflow/addtofav`,{songId},{headers:{Authorization:`Bearer ${token}`}})
+      const token = localStorage.getItem("token");
+      await axios.post(
+        `${import.meta.env.VITE_API_URL}/Beatflow/addtofav`,
+        { songId },
+        { headers: { Authorization: `Bearer ${token}` } },
+      );
       alert("✅ Added to favourites");
     } catch (error) {
       console.log("Fav error", error.response?.data || error);
     }
-  }
+  };
   return (
     <div className="bg-[#0b0f19] min-h-screen p-6 text-white">
       {/* HEADER */}
@@ -74,10 +87,10 @@ const PlaylistContent = () => {
             key={dothing._id}
             className="flex items-center justify-between px-4 py-3 rounded-xl hover:bg-white/10 transition duration-300 group"
             onClick={() => {
-              setPlaylistplay(true),
+              (setPlaylistplay(true),
                 setSonglist(getallsongs),
                 setCurrentindex(index),
-                setCurrentSong(getallsongs[index]);
+                setCurrentSong(getallsongs[index]));
             }}
           >
             {/* LEFT */}
@@ -108,12 +121,17 @@ const PlaylistContent = () => {
             {/* RIGHT */}
             <div className="flex items-center gap-10">
               <div className=" ">
-                
-                <FaHeart className="hover:text-red-500 hover:scale-125" size={17} onClick={(e)=>{e.stopPropagation(), addtofav(dothing._id) }}/>
+                <FaHeart
+                  className="hover:text-red-500 hover:scale-125"
+                  size={17}
+                  onClick={(e) => {
+                    (e.stopPropagation(), addtofav(dothing._id));
+                  }}
+                />
               </div>
 
               {/* DURATION */}
-              <span className="text-xs text-gray-500 group-hover:text-gray-300 hidden sm:block" >
+              <span className="text-xs text-gray-500 group-hover:text-gray-300 hidden sm:block">
                 3:45
               </span>
 
@@ -133,7 +151,13 @@ const PlaylistContent = () => {
                       Edit
                     </button> */}
 
-                    <button className="w-full text-left px-3 py-2 text-sm text-red-400 hover:bg-red-500/20">
+                    <button
+                      className="w-full text-left px-3 py-2 text-sm text-red-400 hover:bg-red-500/20"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        dltplaylistsong(dothing._id);
+                      }}
+                    >
                       Delete
                     </button>
                   </div>

@@ -61,17 +61,15 @@ function App() {
             <Route path="/urplaylist" element={<PlaylistContent />} />
             ////
             <Route path="/playlistforu" element={<PlaylistTou />}>
-            <Route index element={<Weatherplaylist />} />
+              <Route index element={<Weatherplaylist />} />
               <Route path="retro" element={<RetroVibes />} />
-              <Route path="toptracks" element={<TopTracks/>} />
-              <Route path="trending" element={<TrendingSongs/>} />
-              
+              <Route path="toptracks" element={<TopTracks />} />
+              <Route path="trending" element={<TrendingSongs />} />
             </Route>
             ////
-            <Route path="/musicplayer" element={<MusicPlayer/>}/>
+            <Route path="/musicplayer" element={<MusicPlayer />} />
             <Route path="/playsong" element={<Playsongs />} />
-
-            <Route path="/artistpage" element={<Artistpage/>}/>
+            <Route path="/artistpage" element={<Artistpage />} />
           </Routes>
         </BrowserRouter>
       </Playerprovider>

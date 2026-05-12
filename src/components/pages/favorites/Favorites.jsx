@@ -6,6 +6,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { FaHeart } from "react-icons/fa";
 import { CgPlayListAdd } from "react-icons/cg";
 import { useplayer } from "../../context/Playerprovider";
+import Playsongs from "../../dashboard/Playsongs";
 const Favorites = () => {
   // const location = useLocation();
   // const songId = location.state?.songId;
@@ -84,110 +85,149 @@ const navigate=useNavigate()
     }
   };
 
+const [clickplaysong,setClickplaysong]=useState(false)
+
   return (
-    <div>
-      <div className=" p-5">
-        {/* headerportion */}
+      <div className="w-full overflow-x-hidden">
+    <div className="p-3 sm:p-5 md:p-6 lg:p-7">
+      {/* HEADER */}
+
+      <div className="flex  sm:flex-row sm:items-center gap-4">
+        <div className="w-10 h-10 sm:w-14 sm:h-14 md:w-16 md:h-16 bg-gradient-to-br from-red-500 to-pink-600 rounded-2xl flex justify-center items-center shrink-0">
+          <MdFavorite className="text-white text-2xl sm:text-3xl" />
+        </div>
 
         <div>
-          <div className="flex items-center gap-3 flex-wrap">
-            <div className="w-16 h-16 bg-linear-to-br from-red-500 to-pink-600 rounded-xl flex justify-center items-center">
-              <MdFavorite className="text-white w-6 h-6 " />
-            </div>
-            <div>
-              <h1 className="text-2xl sm:text-3xl md:text-5xl text-white">
-                Favorites
-              </h1>
-              <p className="text-gray-400">{getfavsongs.length} you love</p>
-            </div>
-          </div>
-          <div></div>
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold bg-gradient-to-r from-red-400 via-pink-500 to-rose-500 bg-clip-text text-transparent">
+            Favorites
+          </h1>
+
+          <p className="text-gray-400 text-sm sm:text-base md:text-lg mt-1">
+            {getfavsongs.length} songs you love
+          </p>
         </div>
+      </div>
 
-        {/* button  */}
-        <div className="pt-7">
-          <button className="px-6 py-2 sm:px-8 sm:py-3 bg-white text-black rounded-full hover:bg-gray-200 flex items-center gap-2 whitespace-nowrap">
-            <MdFavorite />
-            <h3>Play All Favorites</h3>
-          </button>
-        </div>
+      {/* BUTTON */}
 
-        {/* favourites */}
+      <div className="pt-6 sm:pt-7">
+        <button className="w-full sm:w-auto px-5 py-3 sm:px-8 bg-white text-black rounded-full hover:bg-gray-200 transition duration-300 flex items-center justify-center gap-2 font-medium">
+          <MdFavorite />
+          <h3>
+            Play All <span className="hidden sm:inline">Favorites</span>
+          </h3>
+        </button>
+      </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 mt-7 justify-items-center">
-          {getfavsongs.map((favsongs, index) => (
-            <div
-              className="relative rounded-2xl w-full max-w-xs min-h-[260px] p-3 flex flex-col items-center shadow-sm bg-gray-950 hover:scale-105 transition duration-300"
-              onClick={() => {
-                setSonglist(favSongsOnly);
-                setCurrentindex(index);
-                setCurrentSong(favSongsOnly[index]);
-              }}
-             key={favsongs._id} >
-              {/* IMAGE */}
-              <div className="h-32 sm:h-40 w-full rounded-xl overflow-hidden mb-4">
-                <img
-                  src={`${import.meta.env.VITE_API_URL}/${favsongs.songId?.songimage}`}
-                  className="w-full h-full object-cover"
-                />
-              </div>
+      {/* SONG CARDS */}
 
-              {/* TEXT */}
-              <div className="w-full px-1">
-                <h5 className="text-white text-sm font-semibold truncate">
-                  {favsongs.songId?.songname}
-                </h5>
-                <p className="text-gray-400 text-xs truncate">
-                  {favsongs.songId?.artist}
-                </p>
-              </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 mt-8">
+        {getfavsongs.map((favsongs, index) => (
+          <div
+            key={favsongs._id}
+            className="group relative rounded-2xl w-full bg-zinc-950 hover:bg-zinc-900 border border-zinc-900 p-2 transition-all duration-300 hover:scale-[1.02] cursor-pointer"
+            onClick={() => {
+              setSonglist(favSongsOnly);
+              setCurrentindex(index);
+              setCurrentSong(favSongsOnly[index]);
+              setClickplaysong(true);
+            }}
+          >
+            {/* IMAGE */}
 
-              <div className="absolute bottom-0 flex  justify-between w-full pl-3 pr-3 pb-2">
-                <CgPlayListAdd
-                  className="text-green-400 text-2xl cursor-pointer"
-                  onClick={(e) => {
-                    e.stopPropagation
-                    navigate("/dashboard/playlist",
-                      {
-                        state: { songId: favsongs.songId._id },
-                      });
-                  }}
-                />
-                <FaHeart
-                  className=" text-red-400 text-lg cursor-pointer hover:scale-110 transition duration-300"
-                  onClick={() => deletefav(favsongs.songId._id)}
-                />
-              </div>
-            </div>
-          ))}
-        </div>
-
-        <div className="  pt-7">
-          <div className="flex flex-col md:flex-row gap-4">
-            <div className="border border-solid border-gray-900 rounded-xl p-6 grow">
-              <h3 className="text-gray-400 text-sm mb-2">Total songs</h3>
-              <p className="text-3xl text-white">{getfavsongs.length}</p>
+            <div className="w-full h-44 sm:h-48 md:h-52 rounded-xl overflow-hidden">
+              <img
+                src={`${import.meta.env.VITE_API_URL}/${favsongs.songId?.songimage}`}
+                className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
+                alt=""
+              />
             </div>
 
-            <div className="border border-solid border-gray-900 rounded-xl text-sm sm:text-base md:text-lg flex justify-center items-center p-4 grow">
-              <h3 className="text-gray-400   text-center italic">
-                <span className="text-black text-2xl">“</span> Where words{" "}
-                <span className="text-red-700 text-2xl">f</span>ail, music
-                speaks <span className="text-black text-2xl">”</span>
-              </h3>
-            </div>
+            {/* CONTENT */}
 
-            <div className="border border-solid border-gray-900 rounded-xl p-6  grow">
-              <h3 className="text-gray-400 text-sm mb-2">Total Duration</h3>
-              <p className="text-3xl text-white">
-                {" "}
-                {converttomin(totalduration)}
+            <div className="pt-2">
+              <h5 className="text-white text-sm sm:text-base font-semibold truncate">
+                {favsongs.songId?.songname}
+              </h5>
+
+              <p className="text-gray-400 text-xs sm:text-sm truncate mt-1">
+                {favsongs.songId?.artist}
               </p>
             </div>
+
+            {/* ACTIONS */}
+
+            <div className="flex items-center justify-between pt-5">
+              <CgPlayListAdd
+                className="text-green-400 text-2xl cursor-pointer hover:scale-110 transition duration-300"
+                onClick={(e) => {
+                  e.stopPropagation();
+
+                  navigate("/dashboard/playlist", {
+                    state: { songId: favsongs.songId._id },
+                  });
+                }}
+              />
+
+              <FaHeart
+                className="text-red-400 text-lg sm:text-xl cursor-pointer hover:scale-110 transition duration-300"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  deletefav(favsongs.songId._id);
+                }}
+              />
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* STATS */}
+
+      <div className="pt-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {/* TOTAL SONGS */}
+
+          <div className="border border-zinc-900 rounded-2xl p-5 bg-zinc-950">
+            <h3 className="text-gray-400 text-sm mb-2">Total Songs</h3>
+
+            <p className="text-2xl sm:text-3xl font-bold text-white">
+              {getfavsongs.length}
+            </p>
+          </div>
+
+          {/* QUOTE */}
+
+          <div className="border border-zinc-900 rounded-2xl p-5 bg-zinc-950 flex justify-center items-center">
+            <h3 className="text-gray-300 text-sm sm:text-base md:text-lg text-center italic leading-relaxed">
+              <span className="text-red-500 text-2xl">“</span>
+              Where words fail, music speaks
+              <span className="text-red-500 text-2xl">”</span>
+            </h3>
+          </div>
+
+          {/* DURATION */}
+
+          <div className="border border-zinc-900 rounded-2xl p-5 bg-zinc-950">
+            <h3 className="text-gray-400 text-sm mb-2">
+              Total Duration
+            </h3>
+
+            <p className="text-xl sm:text-2xl md:text-3xl font-bold text-white">
+              {converttomin(totalduration)}
+            </p>
           </div>
         </div>
       </div>
     </div>
+
+    {/* PLAYER */}
+
+    {clickplaysong && (
+      <div className="w-full">
+        <Playsongs />
+      </div>
+    )}
+  </div>
   );
 };
 
