@@ -103,9 +103,9 @@ const navigato=useNavigate()
         <Link
           to={data.path}
           key={index}
-          className="  flex justify-center sm:justify-start items-center py-3 px-6 gap-4 sm:hover:bg-slate-800 md:hover:bg-slate-800 lg:hover:bg-slate-800 w-full rounded-md cursor-pointer  transition-all duration-300 "
+          className="   justify-center sm:justify-start items-center py-3 px-6 gap-4 sm:hover:bg-slate-800 md:hover:bg-slate-800 lg:hover:bg-slate-800 w-full rounded-md cursor-pointer  transition-all duration-300 "
         >
-          <div>{data.icons}</div>
+          <div className=''>{data.icons}</div>
 
           <p className="text-slate-400 hidden md:block">
             {data.name}
