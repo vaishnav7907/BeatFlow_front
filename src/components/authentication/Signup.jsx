@@ -42,7 +42,7 @@ const Signup = ({setIslogin }) => {
         );
 
         localStorage.setItem("token", res.data.token);
-        setIslogin(true); // ✅ VERY IMPORTANT
+        setIslogin(true); 
         navigation("/dashboard");
       }
     } catch (error) {
