@@ -5,11 +5,38 @@ import { FaRegCirclePlay } from "react-icons/fa6";
 import { FaRegCirclePause } from "react-icons/fa6";
 import { FaArrowLeftLong } from "react-icons/fa6";
 import { useNavigate, useLocation } from "react-router-dom";
+import { useplayer } from "../../context/Playerprovider";
 
 const MusicPlayer = () => {
-  const location = useLocation();
-  const song = location.state?.currentSong;
+  const {
+    currentSong,
+    setCurrentSong,
+    songlist,
+    currentindex,
+    setCurrentindex,
+  } = useplayer();
 
+  const song = currentSong;
+  // const location = useLocation();
+  // const song = location.state?.currentSong;
+
+  const forwardsong = () => {
+    if (!songlist.length) return;
+
+    const nextindex = (currentindex + 1) % songlist.length;
+
+    setCurrentindex(nextindex);
+    setCurrentSong(songlist[nextindex]);
+  };
+
+  const backwardsong = () => {
+    if (!songlist.length) return;
+
+    const previndex = (currentindex - 1 + songlist.length) % songlist.length;
+
+    setCurrentindex(previndex);
+    setCurrentSong(songlist[previndex]);
+  };
   const musicref = useRef(null);
 
   const [isplay, setIsplay] = useState(false);
@@ -57,11 +84,21 @@ const MusicPlayer = () => {
 
   const navigation = useNavigate();
 
+  // useEffect(() => {
+  //   if (song && musicref.current) {
+  //     musicref.current.play();
+  //     setIsplay(true);
+  //   }
+  // }, [song]);
+
   useEffect(() => {
-    if (song && musicref.current) {
-      musicref.current.play();
-      setIsplay(true);
-    }
+    if (!song || !musicref.current) return;
+
+    musicref.current.load();
+
+    playmusic();
+    setCurrettime(0);
+    setDuration(0);
   }, [song]);
 
   return (
@@ -99,7 +136,10 @@ const MusicPlayer = () => {
               </div>
 
               <div className="flex items-center justify-center gap-4 sm:gap-6 mb-6 pt-2">
-                <button className="w-7 h-7 sm:w-12 sm:h-12 rounded-full bg-zinc-800 hover:bg-zinc-700 text-white flex items-center justify-center transition duration-300">
+                <button
+                  onClick={backwardsong}
+                  className="w-7 h-7 sm:w-12 sm:h-12 rounded-full bg-zinc-800 hover:bg-zinc-700 text-white flex items-center justify-center transition duration-300"
+                >
                   <IoPlaySkipBackOutline className="w-5 h-5" />
                 </button>
 
@@ -114,7 +154,10 @@ const MusicPlayer = () => {
                   )}
                 </button>
 
-                <button className="w-7 h-7  sm:w-12 sm:h-12 rounded-full bg-zinc-800 hover:bg-zinc-700 text-white flex items-center justify-center transition duration-300">
+                <button
+                  onClick={forwardsong}
+                  className="w-7 h-7 sm:w-12 sm:h-12 rounded-full bg-zinc-800 hover:bg-zinc-700 text-white flex items-center justify-center transition duration-300"
+                >
                   <IoPlaySkipForwardOutline className="w-5 h-5" />
                 </button>
               </div>
